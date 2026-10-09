@@ -1,0 +1,42 @@
+{
+  "@@locale": "en",
+  "appName": "AppName",
+  "@appName": { "description": "Application name shown in the app bar and window title." },
+
+  "languageLabel": "Language",
+  "languageEnglish": "English",
+  "languagePolish": "Polish",
+
+  "heroBadge": "Starter template",
+  "heroTitle": "Build your next idea, faster.",
+  "heroSubtitle": "A clean, modern foundation for your Flutter apps. Localization, theming and authentication are ready, so you can focus on what makes your product unique.",
+
+  "authTitle": "Get started",
+  "authSubtitle": "Sign in or create an account to continue.",
+  "continueWithGoogle": "Continue with Google",
+  "continueWithMicrosoft": "Continue with Microsoft",
+  "createAccountWithEmail": "Create an account with email",
+  "authDivider": "or",
+  "authNotConfigured": "Authentication is not connected yet. It will be available soon.",
+
+  "featuresTitle": "Everything you need to start",
+  "featureLocalizationTitle": "Multilingual",
+  "featureLocalizationDescription": "English and Polish out of the box, with an easy way to add more languages.",
+  "featureThemeTitle": "Modern design",
+  "featureThemeDescription": "A minimal Material 3 theme with automatic light and dark modes.",
+  "featureAuthTitle": "Auth-ready",
+  "featureAuthDescription": "Google, Microsoft and email sign-in behind a single, swappable service.",
+  "featureStructureTitle": "Clean structure",
+  "featureStructureDescription": "Feature-based folders that stay organized as your project grows.",
+
+  "footerCopyright": "© {year} {appName}. All rights reserved.",
+  "@footerCopyright": {
+    "placeholders": {
+      "year": { "type": "int", "format": "compact" },
+      "appName": { "type": "String" }
+    }
+  },
+  "footerPrivacy": "Privacy Policy",
+  "footerTerms": "Terms of Service",
+  "footerContact": "Contact"
+}

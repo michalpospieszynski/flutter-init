@@ -1,0 +1,35 @@
+{
+  "@@locale": "pl",
+  "appName": "AppName",
+
+  "languageLabel": "Język",
+  "languageEnglish": "Angielski",
+  "languagePolish": "Polski",
+
+  "heroBadge": "Szablon startowy",
+  "heroTitle": "Zbuduj swój następny pomysł szybciej.",
+  "heroSubtitle": "Czysta, nowoczesna baza dla Twoich aplikacji we Flutterze. Lokalizacja, motywy i uwierzytelnianie są gotowe, więc możesz skupić się na tym, co wyróżnia Twój produkt.",
+
+  "authTitle": "Zacznij już teraz",
+  "authSubtitle": "Zaloguj się lub utwórz konto, aby kontynuować.",
+  "continueWithGoogle": "Kontynuuj z Google",
+  "continueWithMicrosoft": "Kontynuuj z Microsoft",
+  "createAccountWithEmail": "Utwórz konto za pomocą e-maila",
+  "authDivider": "lub",
+  "authNotConfigured": "Uwierzytelnianie nie jest jeszcze podłączone. Wkrótce będzie dostępne.",
+
+  "featuresTitle": "Wszystko, czego potrzebujesz na start",
+  "featureLocalizationTitle": "Wielojęzyczność",
+  "featureLocalizationDescription": "Angielski i polski od razu, z prostym sposobem na dodanie kolejnych języków.",
+  "featureThemeTitle": "Nowoczesny wygląd",
+  "featureThemeDescription": "Minimalistyczny motyw Material 3 z automatycznym trybem jasnym i ciemnym.",
+  "featureAuthTitle": "Gotowe na logowanie",
+  "featureAuthDescription": "Logowanie przez Google, Microsoft i e-mail za jedną, wymienialną usługą.",
+  "featureStructureTitle": "Przejrzysta struktura",
+  "featureStructureDescription": "Foldery podzielone na funkcje, które pozostają uporządkowane wraz ze wzrostem projektu.",
+
+  "footerCopyright": "© {year} {appName}. Wszelkie prawa zastrzeżone.",
+  "footerPrivacy": "Polityka prywatności",
+  "footerTerms": "Regulamin",
+  "footerContact": "Kontakt"
+}

@@ -1,0 +1,112 @@
+# Firebase configuration template.
+#
+# 1. Copy this file to `config/firebase.yaml` (git-ignored) and replace every
+#    <PLACEHOLDER> with the values from the Firebase console.
+# 2. Where to find them:
+#    Firebase console -> Project settings -> General -> "Your apps".
+#    Add one app per platform (Web, Android, iOS) to get the values below.
+#    Alternatively run `flutterfire configure`, which generates the same data
+#    as `lib/firebase_options.dart`.
+#
+# Do NOT put secrets here (OAuth client secrets, service-account keys, private
+# keys). Those belong only in the Firebase / Google Cloud / Azure consoles.
+# The values in the `platforms` section are public client identifiers.
+
+firebase:
+  project:
+    id: <FIREBASE_PROJECT_ID>              # e.g. my-app-prod
+    displayName: <PROJECT_DISPLAY_NAME>
+    # Use separate Firebase projects per environment (dev / staging / prod).
+    environment: dev
+
+  platforms:
+    web:
+      apiKey: <WEB_API_KEY>
+      appId: <WEB_APP_ID>                  # 1:<number>:web:<hash>
+      authDomain: <FIREBASE_PROJECT_ID>.firebaseapp.com
+      projectId: <FIREBASE_PROJECT_ID>
+      storageBucket: <FIREBASE_PROJECT_ID>.firebasestorage.app
+      messagingSenderId: <SENDER_ID>
+      measurementId: <GA_MEASUREMENT_ID>   # optional, Google Analytics
+
+    android:
+      applicationId: pl.mpospieszynski.flutter_init
+      apiKey: <ANDROID_API_KEY>
+      appId: <ANDROID_APP_ID>              # 1:<number>:android:<hash>
+      projectId: <FIREBASE_PROJECT_ID>
+      storageBucket: <FIREBASE_PROJECT_ID>.firebasestorage.app
+      messagingSenderId: <SENDER_ID>
+      # Required for Google sign-in. Add them in Project settings -> your
+      # Android app. Get them with: `gradlew signingReport` in /android.
+      signingCertificates:
+        debugSha1: <DEBUG_SHA1>
+        debugSha256: <DEBUG_SHA256>
+        releaseSha1: <RELEASE_SHA1>
+        releaseSha256: <RELEASE_SHA256>
+      # Place the downloaded file at android/app/google-services.json.
+
+    ios:
+      bundleId: pl.mpospieszynski.flutterInit
+      apiKey: <IOS_API_KEY>
+      appId: <IOS_APP_ID>                  # 1:<number>:ios:<hash>
+      projectId: <FIREBASE_PROJECT_ID>
+      storageBucket: <FIREBASE_PROJECT_ID>.firebasestorage.app
+      messagingSenderId: <SENDER_ID>
+      appleTeamId: <APPLE_TEAM_ID>
+      # Google sign-in on iOS. REVERSED_CLIENT_ID must be added as a URL scheme
+      # in ios/Runner/Info.plist.
+      clientId: <IOS_OAUTH_CLIENT_ID>
+      reversedClientId: com.googleusercontent.apps.<IOS_CLIENT_ID_PREFIX>
+      # Place the downloaded file at ios/Runner/GoogleService-Info.plist.
+
+  auth:
+    # Console: Authentication -> Sign-in method.
+    providers:
+      emailPassword:
+        enabled: true
+        emailVerificationRequired: true
+        passwordMinLength: 8
+
+      google:
+        enabled: true
+        # OAuth 2.0 *Web* client ID (Google Cloud -> APIs & Services ->
+        # Credentials). Used as serverClientId by google_sign_in on mobile.
+        webClientId: <GOOGLE_WEB_CLIENT_ID>.apps.googleusercontent.com
+
+      microsoft:
+        enabled: true
+        # Azure portal -> Microsoft Entra ID -> App registrations.
+        # The client secret is entered ONLY in the Firebase console.
+        applicationClientId: <AZURE_APPLICATION_CLIENT_ID>
+        # "common" = work, school and personal accounts,
+        # or a specific tenant ID to restrict sign-in to one organization.
+        tenant: common
+        scopes:
+          - openid
+          - profile
+          - email
+        # Register this redirect URI in the Azure app registration.
+        redirectUri: https://<FIREBASE_PROJECT_ID>.firebaseapp.com/__/auth/handler
+
+    # Console: Authentication -> Settings -> Authorized domains.
+    authorizedDomains:
+      - localhost
+      - <FIREBASE_PROJECT_ID>.firebaseapp.com
+      - <YOUR_CUSTOM_DOMAIN>
+
+  firestore:
+    databaseId: "(default)"
+    location: <FIRESTORE_LOCATION>         # e.g. europe-west1, cannot change later
+    collections:
+      users: users                         # one document per user, keyed by uid
+
+  storage:
+    bucket: <FIREBASE_PROJECT_ID>.firebasestorage.app
+
+  # Optional: connect to local Firebase emulators during development.
+  emulators:
+    enabled: false
+    host: 10.0.2.2                         # Android emulator -> host machine
+    authPort: 9099
+    firestorePort: 8080
+    storagePort: 9199
