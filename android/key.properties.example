@@ -1,0 +1,8 @@
+# TEMPLATE - copy to android/key.properties (git-ignored) for release signing.
+# Create the keystore once (keep it OUTSIDE the repository and back it up):
+#   keytool -genkey -v -keystore <PATH_TO_KEYSTORE>.jks -keyalg RSA -keysize 2048 -validity 10000 -alias <KEY_ALIAS>
+# Never commit key.properties, the keystore or the passwords.
+storeFile=<ABSOLUTE_PATH_TO_KEYSTORE>.jks
+storePassword=<KEYSTORE_PASSWORD>
+keyAlias=<KEY_ALIAS>
+keyPassword=<KEY_PASSWORD>

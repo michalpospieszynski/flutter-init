@@ -1,0 +1,30 @@
+{
+  "_comment": "TEMPLATE - download the real file from Firebase console > Project settings > Your apps > Android and save it as android/app/google-services.json (git-ignored). Do not commit it.",
+  "project_info": {
+    "project_number": "<SENDER_ID>",
+    "project_id": "<FIREBASE_PROJECT_ID>",
+    "storage_bucket": "<FIREBASE_PROJECT_ID>.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "<ANDROID_APP_ID>",
+        "android_client_info": {
+          "package_name": "<ANDROID_APPLICATION_ID>"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "<ANDROID_API_KEY>"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -52,3 +52,26 @@ app.*.map.json
 /android/app/google-services.json
 /ios/Runner/GoogleService-Info.plist
 /lib/firebase_options.dart
+
+# Firebase CLI / FlutterFire generated metadata (contains project and app IDs)
+/firebase.json
+/.firebaserc
+firebase-debug.log*
+/ios/firebase_app_id_file.json
+
+# Signing material and other secrets
+key.properties
+*.jks
+*.keystore
+*.p12
+*.pem
+*.p8
+*.mobileprovision
+.env
+.env.*
+!.env.example
+service-account*.json
+*-adminsdk-*.json
+
+# Real Firebase files are ignored; the *.example templates are tracked
+!*.example
