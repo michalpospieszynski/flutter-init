@@ -1,64 +1,71 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/app_scope.dart';
 import '../../../core/localization/l10n_extension.dart';
-import '../../../core/localization/locale_controller.dart';
-import '../../auth/domain/auth_service.dart';
+import '../../../core/theme/app_tokens.dart';
+import '../../../core/widgets/page_body.dart';
 import '../../auth/presentation/auth_card.dart';
+import 'app_bar_actions.dart';
 import 'app_footer.dart';
 import 'app_wordmark.dart';
 import 'feature_card.dart';
-import 'language_switcher.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({
-    super.key,
-    required this.authService,
-    required this.localeController,
-  });
-
-  final AuthService authService;
-  final LocaleController localeController;
-
-  static const double _maxContentWidth = 1040;
-  static const double _wideBreakpoint = 820;
+/// Public landing page with the sign-in card.
+class LandingPage extends StatelessWidget {
+  const LandingPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+
     return Scaffold(
       appBar: AppBar(
         title: const AppWordmark(),
-        actions: [
-          LanguageSwitcher(controller: localeController),
-          const SizedBox(width: 16),
-        ],
+        actions: const [AppBarActions()],
       ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
-          child: Center(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: _maxContentWidth),
-              child: LayoutBuilder(
-                builder: (context, constraints) {
-                  final isWide = constraints.maxWidth >= _wideBreakpoint;
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      _Hero(
-                        isWide: isWide,
-                        authCard: AuthCard(authService: authService),
-                      ),
-                      const SizedBox(height: 72),
-                      const _Features(),
-                      const SizedBox(height: 56),
-                      const AppFooter(),
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: IgnorePointer(
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  gradient: RadialGradient(
+                    center: const Alignment(-0.7, -1.1),
+                    radius: 1.1,
+                    colors: [
+                      scheme.primary.withValues(alpha: 0.16),
+                      Colors.transparent,
                     ],
-                  );
-                },
+                  ),
+                ),
               ),
             ),
           ),
-        ),
+          PageBody(
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final isWide = constraints.maxWidth >= AppBreakpoints.wide;
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    FadeSlideIn(
+                      child: _Hero(
+                        isWide: isWide,
+                        authCard: AuthCard(
+                          authService: AppScope.of(context).authService,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: AppSpacing.section),
+                    const FadeSlideIn(child: _Features()),
+                    const SizedBox(height: 56),
+                    const AppFooter(),
+                  ],
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -82,27 +89,23 @@ class _Hero extends StatelessWidget {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
           decoration: BoxDecoration(
-            color: scheme.primary.withValues(alpha: 0.1),
-            borderRadius: BorderRadius.circular(100),
+            color: scheme.primary.withValues(alpha: 0.12),
+            borderRadius: BorderRadius.circular(AppRadius.chip),
           ),
           child: Text(
             l10n.heroBadge,
             style: theme.textTheme.labelMedium?.copyWith(
               color: scheme.primary,
-              fontWeight: FontWeight.w600,
+              fontWeight: FontWeight.w700,
             ),
           ),
         ),
         const SizedBox(height: 20),
-        Text(
-          l10n.heroTitle,
-          style: theme.textTheme.displaySmall?.copyWith(
-            fontWeight: FontWeight.w800,
-            letterSpacing: -1,
-            height: 1.1,
-          ),
+        Semantics(
+          header: true,
+          child: Text(l10n.heroTitle, style: theme.textTheme.displaySmall),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: AppSpacing.md),
         Text(
           l10n.heroSubtitle,
           style: theme.textTheme.bodyLarge?.copyWith(
@@ -116,7 +119,11 @@ class _Hero extends StatelessWidget {
     if (!isWide) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [intro, const SizedBox(height: 32), authCard],
+        children: [
+          authCard,
+          const SizedBox(height: AppSpacing.xl),
+          intro,
+        ],
       );
     }
 
@@ -156,7 +163,7 @@ class _Features extends StatelessWidget {
         description: l10n.featureAuthDescription,
       ),
       FeatureCard(
-        icon: Icons.account_tree_outlined,
+        icon: Icons.devices_rounded,
         title: l10n.featureStructureTitle,
         description: l10n.featureStructureDescription,
       ),
@@ -165,20 +172,17 @@ class _Features extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          l10n.featuresTitle,
-          style: theme.textTheme.headlineSmall?.copyWith(
-            fontWeight: FontWeight.w700,
-            letterSpacing: -0.5,
-          ),
+        Semantics(
+          header: true,
+          child: Text(l10n.featuresTitle, style: theme.textTheme.headlineSmall),
         ),
-        const SizedBox(height: 24),
+        const SizedBox(height: AppSpacing.lg),
         LayoutBuilder(
           builder: (context, constraints) {
             const spacing = 16.0;
-            final columns = constraints.maxWidth >= 820
+            final columns = constraints.maxWidth >= AppBreakpoints.wide
                 ? 4
-                : constraints.maxWidth >= 520
+                : constraints.maxWidth >= AppBreakpoints.medium
                 ? 2
                 : 1;
             final itemWidth =

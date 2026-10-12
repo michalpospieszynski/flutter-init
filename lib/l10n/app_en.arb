@@ -1,39 +1,129 @@
 {
   "@@locale": "en",
-  "appName": "AppName",
+  "appName": "Aurora",
   "@appName": { "description": "Application name shown in the app bar and window title." },
 
   "languageLabel": "Language",
   "languageEnglish": "English",
   "languagePolish": "Polish",
 
-  "heroBadge": "Starter template",
-  "heroTitle": "Build your next idea, faster.",
-  "heroSubtitle": "A clean, modern foundation for your Flutter apps. Localization, theming and authentication are ready, so you can focus on what makes your product unique.",
+  "themeLabel": "Theme",
+  "themeSystem": "System",
+  "themeLight": "Light",
+  "themeDark": "Dark",
 
-  "authTitle": "Get started",
+  "heroBadge": "Live demo",
+  "heroTitle": "One secure sign-in. Every device.",
+  "heroSubtitle": "Sign in with Google, Microsoft or email on web, Android and iOS. A polished, localized and brandable foundation for your next product.",
+
+  "authTitle": "Welcome",
   "authSubtitle": "Sign in or create an account to continue.",
   "continueWithGoogle": "Continue with Google",
   "continueWithMicrosoft": "Continue with Microsoft",
-  "createAccountWithEmail": "Create an account with email",
-  "authDivider": "or",
+  "authDivider": "or use your email",
   "authNotConfigured": "Authentication is not connected yet. It will be available soon.",
+  "authFailed": "Something went wrong. Please try again.",
+  "authEmailLabel": "Email",
+  "authPasswordLabel": "Password",
+  "authFieldRequired": "This field is required.",
+  "authInvalidEmail": "Enter a valid email address.",
+  "authPasswordTooShort": "Use at least 6 characters.",
+  "authShowPassword": "Show password",
+  "authHidePassword": "Hide password",
+  "authForgotPassword": "Forgot password?",
+  "authResetSent": "If an account exists for {email}, a password reset link is on its way.",
+  "@authResetSent": {
+    "placeholders": { "email": { "type": "String" } }
+  },
+  "authSignInWithEmail": "Sign in",
+  "authCreateAccount": "Create account",
+  "authSwitchToCreate": "No account yet? Create one",
+  "authSwitchToSignIn": "Already have an account? Sign in",
+  "authErrorInvalidCredentials": "Incorrect email or password.",
+  "authErrorEmailInUse": "An account with this email already exists. Try signing in instead.",
+  "authErrorWeakPassword": "That password is too weak. Use at least 6 characters.",
+  "authErrorInvalidEmail": "Enter a valid email address.",
+  "authErrorTooManyRequests": "Too many attempts. Please wait a moment and try again.",
+  "authErrorNetwork": "Network error. Check your connection and try again.",
+  "authErrorPopupBlocked": "Your browser blocked the sign-in popup. Allow popups for this site and try again.",
+  "authErrorUserDisabled": "This account has been disabled.",
+  "authErrorNotEnabled": "This sign-in method is not enabled yet.",
+  "authAccountLinkRequired": "This email is already registered with another sign-in method. Sign in with that method first, then link this one from your profile.",
+  "authLinkAccount": "Link {provider} account",
+  "@authLinkAccount": {
+    "placeholders": { "provider": { "type": "String" } }
+  },
+  "authLinkTitle": "Link your {provider} account",
+  "@authLinkTitle": {
+    "placeholders": { "provider": { "type": "String" } }
+  },
+  "authLinkBody": "You tried to sign in with {provider}. Link it to this account to use either method next time.",
+  "@authLinkBody": {
+    "placeholders": { "provider": { "type": "String" } }
+  },
+  "authLinked": "{provider} account linked.",
+  "@authLinked": {
+    "placeholders": { "provider": { "type": "String" } }
+  },
+  "authVerifyTitle": "Verify your email",
+  "authVerifyBody": "We sent a verification link to {email}. Open it, then confirm here.",
+  "@authVerifyBody": {
+    "placeholders": { "email": { "type": "String" } }
+  },
+  "authVerifyResend": "Resend email",
+  "authVerifyConfirm": "I've verified",
+  "authVerifySent": "Verification email sent.",
+  "authVerifyStillPending": "Your email is not verified yet.",
+  "authSignOut": "Sign out",
 
-  "featuresTitle": "Everything you need to start",
+  "navHome": "Home",
+  "navProfile": "Profile",
+  "navSettings": "Settings",
+
+  "homeGreeting": "Welcome back, {name}",
+  "@homeGreeting": {
+    "placeholders": { "name": { "type": "String" } }
+  },
+  "homeSubtitle": "You are signed in. Here is where to go next.",
+  "homeCardProfileTitle": "Your profile",
+  "homeCardProfileDescription": "Review your account and the sign-in methods you use.",
+  "homeCardSettingsTitle": "Settings",
+  "homeCardSettingsDescription": "Choose your language and light or dark appearance.",
+  "homeCardSecurityTitle": "Sign-in methods",
+  "homeCardSecurityDescription": "Link Google, Microsoft and email to one account.",
+
+  "profileTitle": "Profile",
+  "profileProviders": "Sign-in methods",
+  "profileEmailVerified": "Email verified",
+  "profileEmailNotVerified": "Email not verified",
+  "providerGoogle": "Google",
+  "providerMicrosoft": "Microsoft",
+  "providerPassword": "Email and password",
+
+  "settingsTitle": "Settings",
+  "settingsAppearance": "Appearance",
+  "settingsLanguage": "Language",
+  "settingsAccount": "Account",
+
+  "notFoundTitle": "Page not found",
+  "notFoundBody": "The page you are looking for does not exist.",
+  "notFoundAction": "Go to start",
+
+  "featuresTitle": "Built for real products",
   "featureLocalizationTitle": "Multilingual",
   "featureLocalizationDescription": "English and Polish out of the box, with an easy way to add more languages.",
   "featureThemeTitle": "Modern design",
-  "featureThemeDescription": "A minimal Material 3 theme with automatic light and dark modes.",
-  "featureAuthTitle": "Auth-ready",
-  "featureAuthDescription": "Google, Microsoft and email sign-in behind a single, swappable service.",
-  "featureStructureTitle": "Clean structure",
-  "featureStructureDescription": "Feature-based folders that stay organized as your project grows.",
+  "featureThemeDescription": "A polished Material 3 design with light, dark and system themes.",
+  "featureAuthTitle": "Secure sign-in",
+  "featureAuthDescription": "Google, Microsoft and email sign-in with account linking and email verification.",
+  "featureStructureTitle": "One codebase",
+  "featureStructureDescription": "Web, Android and iOS from a single, cleanly structured Flutter project.",
 
-  "footerCopyright": "© {year} {appName}. All rights reserved.",
+  "footerCopyright": "© {year} {author}. All rights reserved.",
   "@footerCopyright": {
     "placeholders": {
-      "year": { "type": "int", "format": "compact" },
-      "appName": { "type": "String" }
+      "year": { "type": "String" },
+      "author": { "type": "String" }
     }
   },
   "footerPrivacy": "Privacy Policy",

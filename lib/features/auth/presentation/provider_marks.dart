@@ -60,3 +60,12 @@ class MicrosoftMark extends StatelessWidget {
     );
   }
 }
+
+/// Icon for a Firebase-style provider id (google.com, microsoft.com, password).
+Widget providerIcon(String providerId, {double size = 20}) {
+  return switch (providerId) {
+    'google.com' => GoogleMark(size: size),
+    'microsoft.com' => MicrosoftMark(size: size),
+    _ => Icon(Icons.mail_outline_rounded, size: size),
+  };
+}

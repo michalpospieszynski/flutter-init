@@ -72,9 +72,8 @@ Tip: search the project for `flutter_init` and `mpospieszynski` to find anything
    dart pub global activate flutterfire_cli
    firebase login
    flutterfire configure --project=<PROJECT_ID> --platforms=android,ios,web
-   flutter pub add firebase_core firebase_auth google_sign_in cloud_firestore
    ```
-   Then call `Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform)` in `main.dart` before `runApp`.
+   This template already includes `firebase_core` and `firebase_auth`, and initializes Firebase before `runApp`. Run `flutterfire configure` on each checkout to generate its ignored local configuration files.
 3. **Enable providers** (Authentication > Sign-in method):
    - *Email/Password* and *Google*: just enable them.
    - *Microsoft*: register an app in Azure (Entra ID > App registrations), add the redirect URI shown by Firebase (`https://<PROJECT_ID>.firebaseapp.com/__/auth/handler`), create a client secret, and paste the client ID and secret into Firebase.
@@ -82,9 +81,19 @@ Tip: search the project for `flutter_init` and `mpospieszynski` to find anything
    - *Android:* run `gradlew signingReport` in `android/`, add the SHA-1 and SHA-256 (debug and release) to your Firebase Android app, and re-run `flutterfire configure`. Google sign-in fails without them. Set `minSdk` to 23 if the build asks for it.
    - *iOS (Mac needed):* add `REVERSED_CLIENT_ID` from `GoogleService-Info.plist` as a URL scheme in `Info.plist`, then `cd ios && pod install`.
    - *Web:* add your domains under Authentication > Settings > Authorized domains.
-5. **Implement the service:** create `FirebaseAuthService` implementing `AuthService` (`lib/features/auth/domain/auth_service.dart`) and use it instead of `NoopAuthService` in `main.dart`. The email button still needs a sign-up form.
+5. **Auth wiring:** `FirebaseAuthService` (`lib/features/auth/data/firebase_auth_service.dart`) implements `AuthService` and is passed to the app in `main.dart`. It covers Google, Microsoft (Entra ID, via Firebase's `microsoft.com` provider) and email/password. Keep provider-specific code in the data layer.
 6. **Secure it:** write Firestore security rules (users access only `users/<uid>`), restrict API keys in Google Cloud, and never commit `google-services.json`, `GoogleService-Info.plist`, `firebase_options.dart`, `config/firebase.yaml` or any secrets. They are already git-ignored.
 
 ### 4. Before release
 
 Set up Android signing (add the release SHA to Firebase) and iOS signing in Xcode, then build with `flutter build appbundle`, `flutter build ipa` or `flutter build web`.
+
+## App structure & design
+
+- **Name/brand:** Aurora, with the *Indigo Aurora* palette (primary #4F46E5, secondary #7C3AED, accent #22D3EE). Tokens live in lib/core/theme/ (light, dark and system modes, Inter font).
+- **Navigation:** go_router with an auth-aware redirect. / is the landing page; /home, /profile and /settings sit in an adaptive shell (NavigationRail on wide screens, NavigationBar on mobile).
+- **Auth UI:** lib/features/auth/ (Google, Microsoft, email/password, password reset, email verification, provider linking).
+- **Tests:** flutter test (uses test/fake_auth_service.dart).
+
+
+Full UI/UX concept: see [DESIGN.md](DESIGN.md).

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../core/app_scope.dart';
+import '../../../core/config/app_config.dart';
 import '../../../core/config/app_links.dart';
 import '../../../core/localization/l10n_extension.dart';
 
@@ -13,6 +15,7 @@ class AppFooter extends StatelessWidget {
     final l10n = context.l10n;
     final theme = Theme.of(context);
     final muted = theme.colorScheme.onSurfaceVariant;
+    final config = AppScope.of(context).config;
 
     final links = Wrap(
       alignment: WrapAlignment.end,
@@ -21,12 +24,17 @@ class AppFooter extends StatelessWidget {
       children: [
         _FooterLink(label: l10n.footerPrivacy, uri: AppLinks.privacyPolicy),
         _FooterLink(label: l10n.footerTerms, uri: AppLinks.termsOfService),
-        _FooterLink(label: l10n.footerContact, uri: AppLinks.contact),
+        ..._contactLinks(config),
       ],
     );
 
+    final copyrightParts = [
+      if (config.author.isNotEmpty)
+        l10n.footerCopyright(DateTime.now().year.toString(), config.author),
+      if (config.location.isNotEmpty) config.location,
+    ];
     final copyright = Text(
-      l10n.footerCopyright(DateTime.now().year, l10n.appName),
+      copyrightParts.join(' · '),
       style: theme.textTheme.bodySmall?.copyWith(color: muted),
     );
 
@@ -56,6 +64,30 @@ class AppFooter extends StatelessWidget {
       ],
     );
   }
+}
+
+List<Widget> _contactLinks(AppConfig c) {
+  String bare(String url) =>
+      url.replaceFirst(RegExp(r'^https?://(www\.)?'), '');
+  Uri web(String url) =>
+      Uri.parse(url.startsWith('http') ? url : 'https://$url');
+  return [
+    if (c.email.isNotEmpty)
+      _FooterLink(
+        label: c.email,
+        uri: Uri(scheme: 'mailto', path: c.email),
+      ),
+    if (c.phone.isNotEmpty)
+      _FooterLink(
+        label: c.phone,
+        uri: Uri(scheme: 'tel', path: c.phone.replaceAll(' ', '')),
+      ),
+    if (c.website.isNotEmpty)
+      _FooterLink(label: bare(c.website), uri: web(c.website)),
+    if (c.linkedin.isNotEmpty)
+      _FooterLink(label: 'LinkedIn', uri: web(c.linkedin)),
+    if (c.github.isNotEmpty) _FooterLink(label: 'GitHub', uri: web(c.github)),
+  ];
 }
 
 class _FooterLink extends StatelessWidget {

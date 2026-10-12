@@ -1,12 +1,12 @@
 {
-    "name": "flutter_init",
-    "short_name": "flutter_init",
+    "name": "Aurora",
+    "short_name": "Aurora",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0F0F12",
     "theme_color": "#4F46E5",
-    "description": "Flutter app init",
-    "orientation": "portrait-primary",
+    "description": "Secure sign-in across web, Android and iOS.",
+    "orientation": "any",
     "prefer_related_applications": false,
     "icons": [
         {

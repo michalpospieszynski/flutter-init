@@ -1,6 +1,8 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 
+import '../../../core/app_scope.dart';
 import '../../../core/localization/l10n_extension.dart';
+import '../../../core/theme/app_tokens.dart';
 
 /// Logo mark plus app name, used as the app bar title.
 class AppWordmark extends StatelessWidget {
@@ -16,16 +18,12 @@ class AppWordmark extends StatelessWidget {
           height: 32,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            gradient: const LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [Color(0xFF4F46E5), Color(0xFF7C3AED)],
-            ),
+            gradient: context.appColors.brandGradient,
           ),
           child: const Icon(Icons.bolt_rounded, size: 20, color: Colors.white),
         ),
         const SizedBox(width: 10),
-        Text(context.l10n.appName),
+        Text(AppScope.of(context).config.nameOr(context.l10n.appName)),
       ],
     );
   }
