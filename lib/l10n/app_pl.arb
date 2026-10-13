@@ -116,7 +116,10 @@
   "featureStructureDescription": "Web, Android i iOS z jednego, przejrzyście zorganizowanego projektu Flutter.",
 
   "footerCopyright": "© {year} {author}. Wszelkie prawa zastrzeżone.",
-  "footerPrivacy": "Polityka prywatności",
-  "footerTerms": "Regulamin",
-  "footerContact": "Kontakt"
+  "footerContact": "Kontakt",
+  "legalPrivacy": "Polityka prywatności",
+  "legalTerms": "Regulamin",
+  "legalLoadError": "Nie udało się wczytać dokumentu.",
+  "settingsLegal": "Informacje prawne",
+  "authLegalNotice": "Kontynuując, akceptujesz"
 }

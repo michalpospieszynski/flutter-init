@@ -18,6 +18,17 @@ if (keystorePropertiesFile.exists()) {
     keystorePropertiesFile.inputStream().use { keystoreProperties.load(it) }
 }
 
+// App name shown under the launcher icon, read from base_app_config.yaml (app_name).
+val appLabel = rootProject.file("../base_app_config.yaml")
+    .takeIf { it.exists() }
+    ?.readLines()
+    ?.firstOrNull { it.startsWith("app_name:") }
+    ?.substringAfter(":")
+    ?.trim()
+    ?.trim('"', '\'')
+    ?.takeIf { it.isNotEmpty() }
+    ?: "flutter_init"
+
 android {
     namespace = "pl.mpospieszynski.flutter_init"
     compileSdk = flutter.compileSdkVersion
@@ -41,6 +52,11 @@ android {
         // flag during build.
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+        // Redirect scheme for the Microsoft sign-in (flutter_appauth).
+        // Must be lowercase and match the redirect URI in the Azure app registration.
+        manifestPlaceholders += mapOf(
+            "appLabel" to appLabel,
+        )
     }
 
     signingConfigs {

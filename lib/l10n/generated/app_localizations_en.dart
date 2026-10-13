@@ -302,11 +302,20 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get footerPrivacy => 'Privacy Policy';
-
-  @override
-  String get footerTerms => 'Terms of Service';
-
-  @override
   String get footerContact => 'Contact';
+
+  @override
+  String get legalPrivacy => 'Privacy Policy';
+
+  @override
+  String get legalTerms => 'Terms of Service';
+
+  @override
+  String get legalLoadError => 'This document could not be loaded.';
+
+  @override
+  String get settingsLegal => 'Legal';
+
+  @override
+  String get authLegalNotice => 'Continuing means you accept our';
 }

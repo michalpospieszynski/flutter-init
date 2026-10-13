@@ -59,7 +59,7 @@ Tip: search the project for `flutter_init` and `mpospieszynski` to find anything
   ```
 - Theme colors: `lib/core/theme/app_theme.dart` (`_seed` is the main accent color, as `0xFF` plus a hex code, e.g. `0xFF0EA5E9`). Default theme mode: `lib/app.dart` (`ThemeMode.dark`, or `ThemeMode.system` to follow the device).
 - Texts: edit the `.arb` files in `lib/l10n/`, then `flutter gen-l10n`. To add a language, add an `app_<code>.arb` and a segment in `language_switcher.dart`.
-- Footer links: set the three addresses in `lib/core/config/app_links.dart`: the page with your privacy policy, the page with your terms of service, and a `mailto:` support address (for example `mailto:support@mycompany.com`). App stores require a real privacy policy.
+- Legal texts: edit `assets/legal/privacy_{en,pl}.md` and `terms_{en,pl}.md`. They are shown in the app (Settings and the sign-in card), not linked externally. `{appName}`, `{author}` and `{email}` are filled from `base_app_config.yaml`. Use `#`/`##` headings and `- ` bullets only. These are drafts, so have a lawyer review them before release. App stores require a real privacy policy, so also publish it at a public URL and enter it in the Play Console.
 
 ### 3. Firebase
 
@@ -113,6 +113,73 @@ If a secret was ever committed, rotate it (create a new one, delete the old one)
 ### 5. Before release
 
 Set up Android signing (copy `android/key.properties.example` to `android/key.properties`, add the release SHA to Firebase) and iOS signing in Xcode, then build with `flutter build appbundle`, `flutter build ipa` or `flutter build web`.
+
+## Preparing a release
+
+Use this checklist for every new release (store builds, testers, web deploys).
+
+### 1. Decide the version
+
+`pubspec.yaml` has `version: <name>+<build>`, for example `1.2.0+5`.
+
+- **`<name>`** is the user-visible version (semantic versioning: `MAJOR.MINOR.PATCH`). Bump `MAJOR` for breaking changes, `MINOR` for new features, `PATCH` for fixes.
+- **`<build>`** is the internal build number. It must be **higher than the previous upload**. Google Play and the App Store reject a build number they have already seen, even if the name changed. Increase it on every upload, including test builds.
+
+Update `version:` in `pubspec.yaml`. Android and iOS read it automatically, so there is nothing else to edit.
+
+### 2. Update content and legal text
+
+- Texts changed? Edit `lib/l10n/app_*.arb`, then `flutter gen-l10n` (generated files are committed).
+- Changed features, data collected or third-party services? Update `assets/legal/privacy_*.md` and `terms_*.md`, and check the Play Console *Data safety* form still matches.
+- Keep a short changelog entry for the release (e.g. in the GitHub release notes or a `CHANGELOG.md`).
+
+### 3. Run the checks
+
+```bash
+dart format --set-exit-if-changed lib test
+flutter analyze
+flutter test
+```
+
+All three must pass. Then smoke-test the release mode on a real device: `flutter run --release -d <device_id>`. Check sign-in (Google, Microsoft, email), sign-out and the legal pages.
+
+### 4. Build
+
+- **Android (Play Store)**: requires `android/key.properties` and the keystore (see [Secrets](#4-secrets-and-local-configuration-not-in-git)).
+  ```bash
+  flutter build appbundle --release
+  ```
+  The output is `build/app/outputs/bundle/release/app-release.aab`. Upload the `.aab` (not an APK) to Play Console > Testing or Production.
+- **Android (direct install / testers)**: `flutter build apk --release` (`build/app/outputs/flutter-apk/app-release.apk`).
+- **iOS (Mac with Xcode)**: `flutter build ipa --release`, then upload with Xcode Organizer or Transporter.
+- **Web**: `flutter build web --release`. The output is `build/web/`; deploy it to your host (e.g. `firebase deploy --only hosting`). Make sure the production domain is in Firebase Authentication > Authorized domains.
+
+**Known issue:** on some setups `flutter build appbundle --release` fails in `:app:signReleaseBundle` with a `NullPointerException` (`FinalizeBundleTask`), while `flutter build apk --release` works. Workaround:
+
+1. Temporarily change `signingConfig = ...` in the `release` build type of `android/app/build.gradle.kts` to `signingConfig = null`, then run `flutter build appbundle --release`. This produces an unsigned `app-release.aab`.
+2. Revert the change (keep the file as committed).
+3. Sign it with the upload key:
+   ```bash
+   jarsigner -keystore <path-to-keystore.jks> -storetype PKCS12 -sigalg SHA256withRSA -digestalg SHA-256 -signedjar app-release-signed.aab app-release.aab <keyAlias>
+   ```
+
+Verify the result with `jarsigner -verify -certs app-release-signed.aab`.
+
+### 5. Publish and tag
+
+1. Upload the build to the test track first (Internal testing), then promote it to Production once it works.
+2. Tag the commit that was built, so you can reproduce the release later:
+   ```bash
+   git tag -a v1.2.0 -m "Release 1.2.0 (build 5)"
+   git push origin v1.2.0
+   ```
+3. Commit the version bump (and any l10n or legal changes) before tagging. Do not commit the `.aab`, `.apk`, `.ipa` or `build/` output.
+4. After each Firebase or keystore change, re-check the SHA-1/SHA-256 fingerprints registered in Firebase (`gradlew signingReport` in `android/`).
+
+### 6. After the release
+
+- Bump the version for the next release right away (e.g. `1.2.1+6`), so new builds never reuse a number.
+- Note any store review feedback in the release notes for next time.
 
 ## App structure & design
 

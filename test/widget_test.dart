@@ -61,11 +61,12 @@ void main() {
       expect(find.text('One secure sign-in. Every device.'), findsNothing);
     });
 
-    testWidgets('footer shows legal links and localized copyright', (
+    testWidgets('footer shows localized copyright; legal links are in-app', (
       tester,
     ) async {
       await pumpApp(tester);
 
+      // Legal links live on the sign-in card, not in the footer.
       expect(find.text('Privacy Policy'), findsOneWidget);
       expect(find.text('Terms of Service'), findsOneWidget);
       expect(find.textContaining('Ada Author'), findsOneWidget);

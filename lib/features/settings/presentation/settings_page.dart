@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../core/app_scope.dart';
 import '../../../core/localization/l10n_extension.dart';
+import '../../../core/routing/app_routes.dart';
 import '../../../core/theme/app_tokens.dart';
 import '../../../core/widgets/app_button.dart';
 import '../../../core/widgets/page_body.dart';
@@ -77,6 +79,25 @@ class SettingsPage extends StatelessWidget {
                   onPressed: scope.authService.signOut,
                   label: l10n.authSignOut,
                 ),
+              ),
+            ),
+            section(
+              l10n.settingsLegal,
+              Wrap(
+                spacing: AppSpacing.sm,
+                runSpacing: AppSpacing.sm,
+                children: [
+                  AppButton(
+                    style: AppButtonStyle.text,
+                    onPressed: () => context.push(AppRoutes.privacy),
+                    label: l10n.legalPrivacy,
+                  ),
+                  AppButton(
+                    style: AppButtonStyle.text,
+                    onPressed: () => context.push(AppRoutes.terms),
+                    label: l10n.legalTerms,
+                  ),
+                ],
               ),
             ),
           ],

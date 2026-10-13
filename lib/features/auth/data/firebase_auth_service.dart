@@ -1,6 +1,13 @@
+import 'dart:convert';
+import 'dart:math';
+
+import 'package:crypto/crypto.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_web_auth_2/flutter_web_auth_2.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:http/http.dart' as http;
 
 import '../domain/auth_method.dart';
 import '../domain/auth_service.dart';
@@ -15,6 +22,13 @@ class FirebaseAuthService implements AuthService {
     'web-context-cancelled',
     'web-context-canceled',
   };
+
+  static const _microsoftClientId = '72b99c5d-ac6f-42c0-a82d-1029e399ebcc';
+  static const _microsoftTenant = 'common';
+  static const _microsoftCallbackScheme = 'flutterinit';
+  static const _microsoftRedirectUrl =
+      '$_microsoftCallbackScheme://oauth2redirect';
+  static const _microsoftScopes = 'openid profile email offline_access';
 
   final FirebaseAuth _auth;
   Future<void>? _googleInit;
@@ -109,6 +123,9 @@ class FirebaseAuthService implements AuthService {
       } on GoogleSignInException catch (e) {
         if (e.code == GoogleSignInExceptionCode.canceled) return;
         rethrow;
+      } on PlatformException catch (e) {
+        if (e.code == 'CANCELED') return;
+        rethrow;
       }
     });
   }
@@ -147,14 +164,12 @@ class FirebaseAuthService implements AuthService {
   }
 
   /// Microsoft Entra ID through Firebase's built-in `microsoft.com` provider.
-  /// The tenant and client secret are configured in the Firebase console.
+  /// On web Firebase handles the popup. On mobile the browser is opened by
+  /// flutter_web_auth_2, which returns to the app directly (Firebase's redirect
+  /// page fails on Android), and the resulting token is passed to Firebase.
   Future<void> _signInWithMicrosoft() async {
     try {
-      if (kIsWeb) {
-        await _auth.signInWithPopup(_microsoftProvider());
-      } else {
-        await _auth.signInWithProvider(_microsoftProvider());
-      }
+      await _auth.signInWithProvider(_microsoftProvider());
     } on FirebaseAuthException catch (e) {
       if (_cancelledCodes.contains(e.code)) return;
       rethrow;
@@ -165,6 +180,91 @@ class FirebaseAuthService implements AuthService {
     return OAuthProvider('microsoft.com')
       ..addScope('email')
       ..setCustomParameters({'prompt': 'select_account'});
+  }
+
+  /// Authorization code flow with PKCE. The browser returns the callback URL
+  /// directly to the app, and the code is exchanged for tokens here.
+  Future<OAuthCredential> _microsoftMobileCredential() async {
+    final verifier = _randomUrlSafe(64);
+    final challenge = base64UrlEncode(
+      sha256.convert(utf8.encode(verifier)).bytes,
+    ).replaceAll('=', '');
+    final state = _randomUrlSafe(32);
+    final rawNonce = _randomUrlSafe(32);
+    final nonce = sha256.convert(utf8.encode(rawNonce)).toString();
+
+    final authorizeUrl = Uri.https(
+      'login.microsoftonline.com',
+      '/$_microsoftTenant/oauth2/v2.0/authorize',
+      {
+        'client_id': _microsoftClientId,
+        'response_type': 'code',
+        'redirect_uri': _microsoftRedirectUrl,
+        'response_mode': 'query',
+        'scope': _microsoftScopes,
+        'state': state,
+        'nonce': nonce,
+        'code_challenge': challenge,
+        'code_challenge_method': 'S256',
+        'prompt': 'select_account',
+      },
+    );
+
+    final callbackUrl = await FlutterWebAuth2.authenticate(
+      url: authorizeUrl.toString(),
+      callbackUrlScheme: _microsoftCallbackScheme,
+    );
+    final params = Uri.parse(callbackUrl).queryParameters;
+    if (params['error'] != null) {
+      throw FirebaseAuthException(
+        code: 'microsoft-auth-failed',
+        message: params['error_description'] ?? params['error'],
+      );
+    }
+    if (params['state'] != state) {
+      throw FirebaseAuthException(code: 'microsoft-invalid-state');
+    }
+    final code = params['code'];
+    if (code == null) {
+      throw FirebaseAuthException(code: 'microsoft-missing-code');
+    }
+
+    final response = await http.post(
+      Uri.https(
+        'login.microsoftonline.com',
+        '/$_microsoftTenant/oauth2/v2.0/token',
+      ),
+      body: {
+        'client_id': _microsoftClientId,
+        'grant_type': 'authorization_code',
+        'code': code,
+        'redirect_uri': _microsoftRedirectUrl,
+        'code_verifier': verifier,
+        'scope': _microsoftScopes,
+      },
+    );
+    final json = jsonDecode(response.body) as Map<String, dynamic>;
+    if (response.statusCode != 200) {
+      throw FirebaseAuthException(
+        code: 'microsoft-token-failed',
+        message:
+            json['error_description'] as String? ?? json['error'] as String?,
+      );
+    }
+    return _microsoftProvider().credential(
+      idToken: json['id_token'] as String?,
+      rawNonce: rawNonce,
+    );
+  }
+
+  static String _randomUrlSafe(int length) {
+    const chars =
+        'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~';
+    final random = Random.secure();
+    return List.generate(
+      length,
+      (_) => chars[random.nextInt(chars.length)],
+    ).join();
   }
 
   Future<void> _linkMethod(User user, AuthMethod method) async {
@@ -182,11 +282,7 @@ class FirebaseAuthService implements AuthService {
           ),
         );
       case AuthMethod.microsoft:
-        if (kIsWeb) {
-          await user.linkWithPopup(_microsoftProvider());
-        } else {
-          await user.linkWithProvider(_microsoftProvider());
-        }
+        await user.linkWithProvider(_microsoftProvider());
       case AuthMethod.email:
         return;
     }

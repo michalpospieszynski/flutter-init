@@ -305,11 +305,20 @@ class AppLocalizationsPl extends AppLocalizations {
   }
 
   @override
-  String get footerPrivacy => 'Polityka prywatności';
-
-  @override
-  String get footerTerms => 'Regulamin';
-
-  @override
   String get footerContact => 'Kontakt';
+
+  @override
+  String get legalPrivacy => 'Polityka prywatności';
+
+  @override
+  String get legalTerms => 'Regulamin';
+
+  @override
+  String get legalLoadError => 'Nie udało się wczytać dokumentu.';
+
+  @override
+  String get settingsLegal => 'Informacje prawne';
+
+  @override
+  String get authLegalNotice => 'Kontynuując, akceptujesz';
 }

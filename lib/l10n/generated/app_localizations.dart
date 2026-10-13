@@ -620,23 +620,41 @@ abstract class AppLocalizations {
   /// **'© {year} {author}. All rights reserved.'**
   String footerCopyright(String year, String author);
 
-  /// No description provided for @footerPrivacy.
-  ///
-  /// In en, this message translates to:
-  /// **'Privacy Policy'**
-  String get footerPrivacy;
-
-  /// No description provided for @footerTerms.
-  ///
-  /// In en, this message translates to:
-  /// **'Terms of Service'**
-  String get footerTerms;
-
   /// No description provided for @footerContact.
   ///
   /// In en, this message translates to:
   /// **'Contact'**
   String get footerContact;
+
+  /// No description provided for @legalPrivacy.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy Policy'**
+  String get legalPrivacy;
+
+  /// No description provided for @legalTerms.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms of Service'**
+  String get legalTerms;
+
+  /// No description provided for @legalLoadError.
+  ///
+  /// In en, this message translates to:
+  /// **'This document could not be loaded.'**
+  String get legalLoadError;
+
+  /// No description provided for @settingsLegal.
+  ///
+  /// In en, this message translates to:
+  /// **'Legal'**
+  String get settingsLegal;
+
+  /// No description provided for @authLegalNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'Continuing means you accept our'**
+  String get authLegalNotice;
 }
 
 class _AppLocalizationsDelegate

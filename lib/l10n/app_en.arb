@@ -126,7 +126,10 @@
       "author": { "type": "String" }
     }
   },
-  "footerPrivacy": "Privacy Policy",
-  "footerTerms": "Terms of Service",
-  "footerContact": "Contact"
+  "footerContact": "Contact",
+  "legalPrivacy": "Privacy Policy",
+  "legalTerms": "Terms of Service",
+  "legalLoadError": "This document could not be loaded.",
+  "settingsLegal": "Legal",
+  "authLegalNotice": "Continuing means you accept our"
 }

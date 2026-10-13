@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../core/localization/l10n_extension.dart';
+import '../../../core/routing/app_routes.dart';
 import '../../../core/theme/app_tokens.dart';
 import '../../../core/widgets/app_button.dart';
 import '../../../core/widgets/app_text_field.dart';
@@ -181,6 +183,8 @@ class _AuthCardState extends State<AuthCard> {
             _Divider(label: l10n.authDivider),
             const SizedBox(height: AppSpacing.lg - 4),
             _emailForm(),
+            const SizedBox(height: AppSpacing.lg),
+            const _LegalNotice(),
           ],
         ),
       ),
@@ -256,6 +260,37 @@ class _AuthCardState extends State<AuthCard> {
           ],
         ),
       ),
+    );
+  }
+}
+
+/// Consent line under the sign-in options, linking to the legal subpages.
+class _LegalNotice extends StatelessWidget {
+  const _LegalNotice();
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final theme = Theme.of(context);
+    final muted = theme.textTheme.bodySmall?.copyWith(
+      color: theme.colorScheme.onSurfaceVariant,
+    );
+
+    return Wrap(
+      alignment: WrapAlignment.center,
+      crossAxisAlignment: WrapCrossAlignment.center,
+      children: [
+        Text(l10n.authLegalNotice, style: muted),
+        TextButton(
+          onPressed: () => context.push(AppRoutes.terms),
+          child: Text(l10n.legalTerms),
+        ),
+        Text('·', style: muted),
+        TextButton(
+          onPressed: () => context.push(AppRoutes.privacy),
+          child: Text(l10n.legalPrivacy),
+        ),
+      ],
     );
   }
 }

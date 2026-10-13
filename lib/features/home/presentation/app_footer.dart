@@ -3,10 +3,9 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/app_scope.dart';
 import '../../../core/config/app_config.dart';
-import '../../../core/config/app_links.dart';
 import '../../../core/localization/l10n_extension.dart';
 
-/// Standard footer: legal links and contact on one side, copyright on the other.
+/// Standard footer: contact on one side, copyright on the other.
 class AppFooter extends StatelessWidget {
   const AppFooter({super.key});
 
@@ -21,11 +20,7 @@ class AppFooter extends StatelessWidget {
       alignment: WrapAlignment.end,
       spacing: 4,
       runSpacing: 0,
-      children: [
-        _FooterLink(label: l10n.footerPrivacy, uri: AppLinks.privacyPolicy),
-        _FooterLink(label: l10n.footerTerms, uri: AppLinks.termsOfService),
-        ..._contactLinks(config),
-      ],
+      children: _contactLinks(config),
     );
 
     final copyrightParts = [

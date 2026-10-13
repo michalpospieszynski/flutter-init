@@ -63,7 +63,7 @@ The full Material 3 `ThemeData` (light and dark) lives in `lib/core/theme/app_th
 ### Landing
 - Hero with headline ("One secure sign-in. Every device."), supporting text and the sign-in card.
 - On mobile the sign-in card comes **first**, so the primary action is above the fold; on wide screens it sits beside the hero copy.
-- Radial gradient background, features grid (security, multi-platform, providers) and a footer with legal links and copyright.
+- Radial gradient background, features grid (security, multi-platform, providers) and a footer with contact details and copyright. Privacy Policy and Terms of Service open as in-app subpages from the sign-in card and Settings.
 - App bar: wordmark, language switch (EN/PL), theme menu.
 
 ### Sign-in card
