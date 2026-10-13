@@ -169,7 +169,11 @@ class FirebaseAuthService implements AuthService {
   /// page fails on Android), and the resulting token is passed to Firebase.
   Future<void> _signInWithMicrosoft() async {
     try {
-      await _auth.signInWithProvider(_microsoftProvider());
+      if (kIsWeb) {
+        await _auth.signInWithPopup(_microsoftProvider());
+      } else {
+        await _auth.signInWithProvider(_microsoftProvider());
+      }
     } on FirebaseAuthException catch (e) {
       if (_cancelledCodes.contains(e.code)) return;
       rethrow;
@@ -282,7 +286,11 @@ class FirebaseAuthService implements AuthService {
           ),
         );
       case AuthMethod.microsoft:
-        await user.linkWithProvider(_microsoftProvider());
+        if (kIsWeb) {
+          await user.linkWithPopup(_microsoftProvider());
+        } else {
+          await user.linkWithProvider(_microsoftProvider());
+        }
       case AuthMethod.email:
         return;
     }
